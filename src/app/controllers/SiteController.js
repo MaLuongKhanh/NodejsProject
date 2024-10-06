@@ -10,8 +10,12 @@ class SiteController {
         for (let i = 0; i < arr.length; i++) {
             console.log(arr[i]);
         }
-        res.render('about', {
-            arr: arr,
+        res.render('home', {
+            title: 'My Home Page',
+            style: 'style.css',
+            body: '<h1>Welcome to my site!</h1>',
+            header: '<h2>My Header</h2>',
+            footer: '<footer.hbs>My Footer</footer.hbs>',
         });
     };
 }

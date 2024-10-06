@@ -1,9 +1,18 @@
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 3000;
 const route = require('./route');
+const morgan = require('morgan');
 const { engine } = require('express-handlebars');
-const path = require('node:path');
+const path = require('path');
+const db = require('./config/db');
+const PORT = process.env.PORT || 3000;
+
+db.connect();
+
+app.use(morgan('combined'));
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 app.engine(
     'hbs',

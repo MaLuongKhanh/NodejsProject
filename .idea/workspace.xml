@@ -4,9 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9af38dff-ff9c-4cd2-b175-e18a81e85835" name="Changes" comment="test husky">
+    <list default="true" id="9af38dff-ff9c-4cd2-b175-e18a81e85835" name="Changes" comment="test husky 2">
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/material_theme_project_new.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/config/db/index.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/views/partials/footer.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.husky/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.husky/pre-commit" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/controllers/SiteController.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/controllers/SiteController.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/index.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/layouts/main.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/layouts/main.hbs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/views/partials/header.hbs" beforeDir="false" afterPath="$PROJECT_DIR$/src/views/partials/header.hbs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -20,6 +32,9 @@
         <option value="JavaScript File" />
       </list>
     </option>
+  </component>
+  <component name="FormatOnSaveOptions">
+    <option name="myRunOnSave" value="true" />
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -36,8 +51,11 @@
     &quot;accountId&quot;: &quot;28bab334-82ad-4908-a4b1-e4710fd48e75&quot;
   }
 }</component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/eslint.config.mjs" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="QODANA_PROBLEMS_VIEW_TAB" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 4
@@ -50,22 +68,25 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;Shell Script.index.js.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Admin/Documents/Test_JS/Test&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;onboarding.tips.debug.path&quot;: &quot;F:/GitHub/Test/src/main.js&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "Shell Script.index.js.executor": "Run",
+    "git-widget-placeholder": "main",
+    "last_opened_file_path": "C:/Users/Admin/Documents/Test_JS/Test",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "onboarding.tips.debug.path": "F:/GitHub/Test/src/main.js",
+    "settings.editor.selected.configurable": "actions.on.save",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2024.2.2\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="F:\GitHub\Test\src\public" />
@@ -107,7 +128,10 @@
       <workItem from="1727270419734" duration="3562000" />
       <workItem from="1727437764319" duration="49000" />
       <workItem from="1728101009666" duration="601000" />
-      <workItem from="1728117650711" duration="7064000" />
+      <workItem from="1728117650711" duration="10120000" />
+      <workItem from="1728134285681" duration="618000" />
+      <workItem from="1728134926038" duration="4529000" />
+      <workItem from="1728181279560" duration="9191000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <option name="closed" value="true" />
@@ -133,7 +157,39 @@
       <option name="project" value="LOCAL" />
       <updated>1728124941314</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="test husky">
+      <option name="closed" value="true" />
+      <created>1728125147820</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1728125147820</updated>
+    </task>
+    <task id="LOCAL-00005" summary="test husky">
+      <option name="closed" value="true" />
+      <created>1728125297955</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1728125297955</updated>
+    </task>
+    <task id="LOCAL-00006" summary="test husky">
+      <option name="closed" value="true" />
+      <created>1728125313472</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1728125313472</updated>
+    </task>
+    <task id="LOCAL-00007" summary="test husky">
+      <option name="closed" value="true" />
+      <created>1728125561020</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1728125561020</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,6 +209,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="test commit" />
     <MESSAGE value="test husky" />
-    <option name="LAST_COMMIT_MESSAGE" value="test husky" />
+    <MESSAGE value="test husky 2" />
+    <option name="LAST_COMMIT_MESSAGE" value="test husky 2" />
   </component>
 </project>
