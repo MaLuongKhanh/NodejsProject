@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const profileMiddleware = require('../app/middlewares/ProfileMiddleware');
+const profileMiddleware = require('../app/middlewares/ProfileMiddleWare');
 
 router.get('/', profileMiddleware.index);
 
