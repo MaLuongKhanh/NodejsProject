@@ -1,0 +1,373 @@
+<div class="container-scroller">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Thêm mới</h4>
+                        <br>
+                        <form class="forms-sample">
+                            <div class="form-group">
+                                <label for="softwareName">Tên phần mềm</label>
+                                <input type="text" class="form-control" id="softwareName">
+                            </div>
+                            <div class="form-group">
+                                <label for="softwareDescription">Mô tả</label>
+                                <input type="text" class="form-control" id="softwareDescription">
+                            </div>
+                            <div class="form-group">
+                                <label for="softwareLink">Link</label>
+                                <input type="text" class="form-control" id="softwareLink">
+                            </div>
+                            <br>
+                            <div class="d-flex justify-content-center">
+                                <button type="submit" class="btn btn-primary">Xác nhận</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="d-flex flex-row justify-content-between">
+                            <h4 class="card-title mb-1">Danh sách phần mềm</h4>
+                        </div>
+                        <br>
+                        <div class="form-group col-12 mx-auto d-flex justify-content-center mb-4">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="searchInput"
+                                       style="color: white;" placeholder="Tìm kiếm phần mềm...">
+                                <button type="button" class="btn btn-info btn-icon-text" style="border-radius: 0;">
+                                    <i class="mdi mdi-account-search" style="margin-right: 0;"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="preview-list">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-center mt-4">
+                            <ul class="pagination" id="pagination"></ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal xác nhận xóa -->
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title text-danger">
+                    <i class="mdi mdi-alert-circle-outline" style="font-size: xx-large;"></i>
+                </h5>
+            </div>
+            <div class="modal-body text-center">
+                <p>Bạn có chắc chắn muốn xóa phần mềm này?</p>
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" onclick="closeConfirmModal()">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allSoftware = [];
+    let currentPage = 1;
+    const itemsPerPage = 5;
+    const currentUser={{{json currentUser}}};
+    let softwareToDelete = null;
+
+    async function loadSoftware() {
+        try {
+            const response = await fetchWithAuth('/kho-phan-mem/danh-sach');
+            if (response.success) {
+                allSoftware = response.data;
+                renderSoftware();
+                renderPagination();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải danh sách phần mềm');
+        }
+    }
+
+    function renderSoftware(filteredData = allSoftware) {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const softwareToShow = filteredData.slice(startIndex, endIndex);
+
+        const previewList = document.querySelector('.card .preview-list');
+        const html = softwareToShow.map(software => `
+        <div class="preview-item border-bottom">
+            <div class="preview-thumbnail">
+                <div class="preview-icon bg-primary">
+                    <i class="mdi mdi-file-document"></i>
+                </div>
+            </div>
+            <div class="preview-item-content">
+                <div class="software-info">
+                    <h6 class="preview-subject">${software.ten || ''}</h6>
+                    <p class="text-muted mb-0">${software.mota || ''}</p>
+                </div>
+                <div class="software-actions">
+                    <p class="text-muted">${new Date(software.ngaydang).toLocaleDateString('vi-VN')}</p>
+                    <div>
+                        <a href="${software.link}" target="_blank" class="btn btn-outline-primary btn-sm">
+                            <i class="mdi mdi-download"></i> Tải xuống
+                        </a>
+                        ${software.mssv === currentUser.mssv || currentUser.role === 'admin' ? `
+                            <button class="btn btn-outline-danger btn-sm ml-2" onclick="deleteSoftware('${software._id}')">
+                                <i class="mdi mdi-delete"></i>
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `).join('');
+        previewList.innerHTML = html;
+    }
+
+    function renderPagination(totalItems = allSoftware.length) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const pagination = document.getElementById('pagination');
+        let html = '';
+
+        // Previous button
+        html += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="javascript:void(0);" onclick="changePage(${currentPage - 1})">Previous</a>
+        </li>
+    `;
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            html += `
+            <li class="page-item ${currentPage === i ? 'active' : ''}">
+                <a class="page-link" href="javascript:void(0);" onclick="changePage(${i})">${i}</a>
+            </li>
+        `;
+        }
+
+        // Next button
+        html += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="javascript:void(0);" onclick="changePage(${currentPage + 1})">Next</a>
+        </li>
+    `;
+
+        pagination.innerHTML = html;
+    }
+
+    function changePage(page) {
+        if (page < 1 || page > Math.ceil(allSoftware.length / itemsPerPage)) return;
+        currentPage = page;
+        renderSoftware();
+        renderPagination();
+    }
+
+    // Add search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredSoftware = allSoftware.filter(software =>
+                software.ten.toLowerCase().includes(searchTerm)
+        );
+        currentPage = 1;
+        renderSoftware(filteredSoftware);
+        renderPagination(filteredSoftware.length);
+    });
+
+    // Update form submission to include mssv
+    document.querySelector('.btn-primary').addEventListener('click', async (e) => {
+        e.preventDefault();
+        const formData = {
+            ten: document.getElementById('softwareName').value,
+            mota: document.getElementById('softwareDescription').value,
+            link: document.getElementById('softwareLink').value,
+            mssv: currentUser.mssv
+        };
+
+        try {
+            const response = await fetchWithAuth('/kho-phan-mem', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.success) {
+                showAlert('Thêm phần mềm thành công', 'success');
+                document.querySelector('form').reset();
+                loadSoftware();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi thêm phần mềm');
+        }
+    });
+
+    async function deleteSoftware(id) {
+        showDeleteModal(id);
+    }
+
+    function showDeleteModal(id) {
+        softwareToDelete = id;
+        const modal = document.getElementById('confirmModal');
+        modal.classList.add('show');
+        modal.style.display = 'block';
+        document.body.classList.add('modal-open');
+        
+        // Thêm backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop fade show';
+        document.body.appendChild(backdrop);
+    }
+
+    function closeConfirmModal() {
+        const modal = document.getElementById('confirmModal');
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+        
+        // Xóa backdrop
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+        }
+    }
+
+    async function confirmDelete() {
+        try {
+            const response = await fetchWithAuth(`/kho-phan-mem/${softwareToDelete}`, {
+                method: 'DELETE'
+            });
+
+            if (response.success) {
+                showAlert('Xóa phần mềm thành công', 'success');
+                loadSoftware();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi xóa phần mềm');
+        } finally {
+            closeConfirmModal();
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        loadSoftware();
+    });
+</script>
+
+<style>
+    .pagination {
+        margin-top: 1rem;
+    }
+
+    .page-link {
+        background-color: transparent;
+        border-color: #2c2e33;
+        color: #6c7293;
+    }
+
+    .page-link:hover {
+        background-color: #2c2e33;
+        border-color: #2c2e33;
+        color: #ffffff;
+    }
+
+    .page-item.active .page-link {
+        background-color: #010057;
+        border-color: #010057;
+        color: #fff;
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #191c24;
+        border-color: #2c2e33;
+        color: #3b3e56;
+    }
+
+    .modal-content {
+        background-color: #191c24;
+        color: #fff;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #2c2e33;
+    }
+
+    .modal-footer {
+        border-top: 1px solid #2c2e33;
+    }
+
+    .modal-header .close {
+        color: #fff;
+        opacity: 0.8;
+    }
+
+    .preview-item-content {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+        width: 100%;
+        align-items: start;
+    }
+
+    .software-info {
+        min-width: 0; /* Để tránh overflow */
+    }
+
+    .software-info h6 {
+        margin: 0;
+        color: #ffffff;
+        font-size: 1rem;
+        font-weight: 500;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .software-info p {
+        margin-top: 0.5rem;
+        color: #6c7293;
+        font-size: 0.875rem;
+        line-height: 1.4;
+    }
+
+    .software-actions {
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .software-actions p {
+        margin-bottom: 0.5rem;
+        color: #6c7293;
+        font-size: 0.875rem;
+    }
+
+    .software-actions .btn {
+        margin-left: 0.5rem;
+    }
+
+    @media (max-width: 576px) {
+        .preview-item-content {
+            grid-template-columns: 1fr;
+            gap: 0.5rem;
+        }
+
+        .software-actions {
+            text-align: left;
+            margin-top: 0.5rem;
+        }
+
+        .software-actions .btn:first-child {
+            margin-left: 0;
+        }
+    }
+</style>

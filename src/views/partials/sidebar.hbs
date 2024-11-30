@@ -1,0 +1,251 @@
+<nav class="sidebar sidebar-offcanvas" id="sidebar">
+    <div class="sidebar-brand-wrapper d-none d-lg-flex align-items-center justify-content-center fixed-top">
+        {{#if (isRole user.role 'admin')}}
+            <a class="sidebar-brand brand-logo" href="/admin"><img src="/images/ITCenterLogo.png" alt="logo" style="width: 250%; height: 250%"/></a>
+            <a class="sidebar-brand brand-logo-mini" href="/admin"><img src="/images/ITCenterLogoMini.png" alt="logo" style="width: 70%; height: 70%"/></a>
+        {{else}}
+            <a class="sidebar-brand brand-logo" href="/trang-chu"><img src="/images/ITCenterLogo.png" alt="logo" style="width: 250%; height: 250%"/></a>
+            <a class="sidebar-brand brand-logo-mini" href="/trang-chu"><img src="/images/ITCenterLogoMini.png" alt="logo" style="width: 70%; height: 70%"/></a>
+        {{/if}}
+    </div>
+    <ul class="nav">
+        <li class="nav-item profile">
+            <div class="profile-desc">
+                <div class="profile-pic">
+                    <div class="count-indicator">
+                        <img class="img-xs rounded-circle " src="/uploads/avatars/default-avatar.jpg" alt="">
+                        <span class="count bg-success"></span>
+                    </div>
+                    <div class="profile-name">
+                        <h5 class="mb-0 font-weight-normal"></h5>
+                        <span></span>
+                    </div>
+                </div>
+                <a href="#" id="profile-dropdown" data-toggle="dropdown"><i class="mdi mdi-dots-vertical"></i></a>
+                <div class="dropdown-menu dropdown-menu-right sidebar-dropdown preview-list"
+                     aria-labelledby="profile-dropdown">
+                    <a href="/quan-li-trang-ca-nhan" class="dropdown-item preview-item">
+                        <div class="preview-thumbnail">
+                            <div class="preview-icon bg-dark rounded-circle">
+                                <i class="mdi mdi-folder-account text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item-content">
+                            <p class="preview-subject ellipsis mb-1 text-small">Quản lý trang cá nhân</p>
+                        </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <a href="/doi-mat-khau" class="dropdown-item preview-item">
+                        <div class="preview-thumbnail">
+                            <div class="preview-icon bg-dark rounded-circle">
+                                <i class="mdi mdi-onepassword text-info"></i>
+                            </div>
+                        </div>
+                        <div class="preview-item-content">
+                            <p class="preview-subject ellipsis mb-1 text-small">Đổi mật khẩu</p>
+                        </div>
+                    </a>
+                    <div class="dropdown-divider"></div>
+                    <div id="openModalBtn">
+                        <a href="javascript:void(0);" class="dropdown-item preview-item">
+                            <div class="preview-thumbnail">
+                                <div class="preview-icon bg-dark rounded-circle">
+                                    <i class="mdi mdi-logout text-danger"></i>
+                                </div>
+                            </div>
+                            <div class="preview-item-content">
+                                <p class="preview-subject ellipsis mb-1 text-small">Đăng xuất</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </li>
+        <li class="nav-item nav-category">
+            <span class="nav-link">Điều hướng</span>
+        </li>
+        {{#if (isRole user.role 'admin')}}
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="/admin">
+                    <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+                    <span class="menu-title">Trang chủ</span>
+                </a>
+            </li>
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="/admin/tin-tuc">
+                    <span class="menu-icon"><i class="mdi mdi-newspaper"></i></span>
+                    <span class="menu-title">Quản lí sự kiện</span>
+                </a>
+            </li>
+        {{else}}
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="/trang-chu">
+                    <span class="menu-icon"><i class="mdi mdi-speedometer"></i></span>
+                    <span class="menu-title">Trang chủ</span>
+                </a>
+            </li>
+        {{/if}}
+        
+        {{#if (isRole user.role 'lead' 'admin')}}
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="/diem-danh-ca-truc">
+                    <span class="menu-icon"><i class="mdi mdi-table-large"></i></span>
+                    <span class="menu-title">Điểm danh ca trực</span>
+                </a>
+            </li>
+        {{/if}}
+        <li class="nav-item menu-items">
+            <a class="nav-link" href="/dang-ky-ca-truc">
+                <span class="menu-icon"><i class="mdi mdi-timetable"></i></span>
+                <span class="menu-title">Đăng ký ca trực</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items">
+            <a class="nav-link" href="/tiep-nhan-ho-tro">
+                <span class="menu-icon"><i class="mdi mdi-laptop"></i></span>
+                <span class="menu-title">Tiếp nhận hỗ trợ</span>
+            </a>
+        </li>
+        {{#if (isRole user.role 'lead' 'admin')}}
+            <li class="nav-item menu-items">
+                <a class="nav-link" href="/kho-phan-mem">
+                    <span class="menu-icon"><i class="mdi mdi-file-multiple"></i></span>
+                    <span class="menu-title">Kho phần mềm</span>
+                </a>
+            </li>
+        {{/if}}
+        <li class="nav-item menu-items">
+            <a class="nav-link" href="/thanh-tich">
+                <span class="menu-icon"><i class="mdi mdi-rocket"></i></span>
+                <span class="menu-title">Thành tích</span>
+            </a>
+        </li>
+        <div class="dropdown-divider"></div>
+        <li class="nav-item menu-items">
+            <a class="nav-link" href="/ve-trang-web">
+                <span class="menu-icon"><i class="mdi mdi-alert-circle-outline"></i></span>
+                <span class="menu-title">Về trang web</span>
+            </a>
+        </li>
+        <li class="nav-item menu-items">
+            <a class="nav-link" href="/ve-chung-toi">
+                <span class="menu-icon"><i class="mdi mdi-account-search"></i></span>
+                <span class="menu-title">Về chúng tôi</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<div id="logoutModal" class="modal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center">
+                <h5 class="modal-title text-danger">
+                    <i class="mdi mdi-alert-circle-outline" style="font-size: xx-large;"></i>
+                </h5>
+            </div>
+            <div class="modal-body">
+                Bạn muốn đăng xuất khỏi IT-Center?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" id="closeLogoutBtn">Đóng</button>
+                <button type="button" class="btn btn-danger" id="confirmLogoutBtn">Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const logoutModal = document.getElementById('logoutModal');
+const openLogoutBtn = document.getElementById('openModalBtn');
+const closeLogoutBtn = document.getElementById('closeLogoutBtn');
+const confirmLogoutBtn = document.getElementById('confirmLogoutBtn');
+
+// Mở modal
+openLogoutBtn.onclick = function() {
+    logoutModal.style.display = "block";
+}
+
+// Đóng modal khi click nút đóng
+closeLogoutBtn.onclick = function() {
+    logoutModal.style.display = "none";
+}
+
+// Xử lý đăng xuất
+confirmLogoutBtn.onclick = async function() {
+    try {
+        const response = await fetchWithAuth('/dang-xuat', {
+            method: 'POST',
+            credentials: 'include'
+        });
+        
+        if (response.success) {
+            window.location.href = '/dang-nhap';
+        } else {
+            console.error('Logout failed:', response.message);
+        }
+    } catch (error) {
+        console.error('Logout failed:', error);
+    } finally {
+        logoutModal.style.display = "none";
+    }
+}
+
+// Đóng modal khi click bên ngoài
+window.onclick = function(event) {
+    if (event.target === logoutModal) {
+        logoutModal.style.display = "none";
+    }
+}
+
+async function loadUserProfile() {
+    try {
+        const response = await fetchWithAuth('/quan-li-trang-ca-nhan/data');
+        if (response.success) {
+            const profile = response.data;
+            
+            // Cập nhật avatar
+            const avatarImg = document.querySelector('.profile-pic .count-indicator img');
+            avatarImg.src = profile.avatar || '/uploads/avatars/default-avatar.jpg';
+            
+            // Cập nhật tên và role
+            const nameElement = document.querySelector('.profile-name h5');
+            const roleElement = document.querySelector('.profile-name span');
+            
+            nameElement.textContent = profile.hoten;
+            
+            // Chuyển đổi role sang tiếng Việt
+            const roleTranslations = {
+                'admin': 'Quản trị viên',
+                'lead': 'Trưởng nhóm',
+                'member': 'Thành viên',
+                'customer': 'Khách hàng'
+            };
+            roleElement.textContent = roleTranslations[profile.role] || profile.role;
+        }
+    } catch (error) {
+        console.error('Error loading user profile:', error);
+    }
+}
+
+// Gọi hàm load profile khi trang được load
+document.addEventListener('DOMContentLoaded', loadUserProfile);
+
+</script>
+
+<style>
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1050;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-dialog {
+    margin: 10% auto;
+}
+</style>

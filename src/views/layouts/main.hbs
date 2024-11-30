@@ -1,30 +1,286 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITCenter</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
-          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>IT-Center</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <link rel="stylesheet" href="/vendors/jvectormap/jquery-jvectormap.css">
+    <link rel="stylesheet" href="/vendors/flag-icon-css/css/flag-icon.min.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel-2/owl.carousel.min.css">
+    <link rel="stylesheet" href="/vendors/owl-carousel-2/owl.theme.default.min.css">
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
     <link rel="stylesheet" href="/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="/images/ITCenterLogoMini.png"/>
+    <style>
+        body { 
+            visibility: hidden; 
+        }
+        
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #page {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            transform: scale(0.5);
+        }
+
+        #h3 {
+            color: white;
+            font-size: 1.2em;
+        }
+
+        #ring {
+            width: 190px;
+            height: 190px;
+            border: 1px solid transparent;
+            border-radius: 50%;
+            position: absolute;
+        }
+
+        #ring:nth-child(1) {
+            border-bottom: 8px solid rgb(255, 141, 249);
+            animation: rotate1 2s linear infinite;
+        }
+
+        @keyframes rotate1 {
+            from {
+                transform: rotateX(50deg) rotateZ(110deg);
+            }
+            to {
+                transform: rotateX(50deg) rotateZ(470deg);
+            }
+        }
+
+        #ring:nth-child(2) {
+            border-bottom: 8px solid rgb(255,65,106);
+            animation: rotate2 2s linear infinite;
+        }
+
+        @keyframes rotate2 {
+            from {
+                transform: rotateX(20deg) rotateY(50deg) rotateZ(20deg);
+            }
+            to {
+                transform: rotateX(20deg) rotateY(50deg) rotateZ(380deg);
+            }
+        }
+
+        #ring:nth-child(3) {
+            border-bottom: 8px solid rgb(0,255,255);
+            animation: rotate3 2s linear infinite;
+        }
+
+        @keyframes rotate3 {
+            from {
+                transform: rotateX(40deg) rotateY(130deg) rotateZ(450deg);
+            }
+            to {
+                transform: rotateX(40deg) rotateY(130deg) rotateZ(90deg);
+            }
+        }
+
+        #ring:nth-child(4) {
+            border-bottom: 8px solid rgb(252, 183, 55);
+            animation: rotate4 2s linear infinite;
+        }
+
+        @keyframes rotate4 {
+            from {
+                transform: rotateX(70deg) rotateZ(270deg);
+            }
+            to {
+                transform: rotateX(70deg) rotateZ(630deg);
+            }
+        }
+    </style>
 </head>
+
 <body>
-<div class="app">
-
-    {{>header}}
-
-    <div class="container">
-        {{{body}}}
+    <div class="loading-overlay">
+        <div id="page">
+            <div id="container">
+                <div id="ring"></div>
+                <div id="ring"></div>
+                <div id="ring"></div>
+                <div id="ring"></div>
+                <div id="h3">loading</div>
+            </div>
+        </div>
     </div>
+    {{> alert}}
+    <div class="container-scroller">
+        <!-- partial:partials/_sidebar.html -->
+        {{> sidebar user=user}}
+        <!-- partial -->
+        <div class="container-fluid page-body-wrapper">
+            <!-- partial:partials/_navbar.html -->
+            {{> navbar}}
+            <!-- partial -->
+            <div class="main-panel">
+                {{{body}}}
+                <!-- content-wrapper ends -->
+                <!-- partial:partials/_footer.html -->
+                {{> footer}}
+                <!-- partial -->
+            </div>
+            <!-- main-panel ends -->
+        </div>
+        <!-- page-body-wrapper ends -->
+    </div>
+    <!-- container-scroller -->
+    <!-- plugins:js -->
+    <script src="/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/vendors/chart.js/Chart.min.js"></script>
+    <script src="/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+    <!-- End plugin js for this page -->
+    <!-- inject:js -->
+    <script src="/js/off-canvas.js"></script>
+    <script src="/js/hoverable-collapse.js"></script>
+    <script src="/js/misc.js"></script>
+    <script src="/js/settings.js"></script>
+    <script src="/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="/js/dashboard.js"></script>
+    <!-- End custom js for this page -->
+    <script>
+        // Global fetch interceptor
+        const fetchWithAuth = async (url, options = {}) => {
+            const loadingOverlay = document.querySelector('.loading-overlay');
+            try {
+                loadingOverlay.style.display = 'flex';
+                
+                options.credentials = 'include';
+                let response = await fetch(url, options);
+                
+                let data;
+                try {
+                    data = await response.json();
+                    if (data.message) {
+                        if (data.success === true) {
+                            showAlert(data.message, 'success');
+                        } else {
+                            showAlert(data.message, 'error');
+                        }
+                    }
+                } catch (e) {
+                    throw new Error('Invalid JSON response');
+                }
+                
+                if (!data?.success || response.status === 401) {
+                    const refreshResponse = await fetch('/auth/refresh-token', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    
+                    const refreshData = await refreshResponse.json();
+                    
+                    if (!refreshData.success) {
+                        window.location.href = '/dang-nhap';
+                        return null;
+                    }
+                    
+                    response = await fetch(url, options);
+                    data = await response.json();
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            } finally {
+                loadingOverlay.style.display = 'none';
+            }
+        };
 
-    {{>footer}}
-</div>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-        integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-        integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-        crossorigin="anonymous"></script>
+        // Unified auth check function
+        const checkAuth = async () => {
+            try {
+                const response = await fetch('/auth/check', {
+                    method: 'GET',
+                    credentials: 'include'
+                });
+                
+                const data = await response.json();
+                
+                if (!data.success) {
+                    const refreshResponse = await fetch('/auth/refresh-token', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    
+                    const refreshData = await refreshResponse.json();
+                    
+                    if (!refreshData.success) {
+                        window.location.href = '/dang-nhap';
+                        return null;
+                    }
+                    return refreshData.user;
+                }
+                
+                return data.user;
+            } catch (error) {
+                console.error('Auth check failed:', error);
+                window.location.href = '/dang-nhap';
+                return null;
+            }
+        };
+
+        // Initial auth check
+        (async function() {
+            const user = await checkAuth();
+            if (user) {
+                document.body.style.visibility = 'visible';
+                // Kiểm tra định kỳ (mỗi 5 phút)
+                setInterval(checkAuth, 5 * 60 * 1000);
+            }
+        })();
+
+        const showAlert = (message, type = 'error') => {
+            const alert = document.getElementById(type === 'error' ? 'errorAlert' : 'successAlert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        };
+    </script>
 </body>
+
 </html>

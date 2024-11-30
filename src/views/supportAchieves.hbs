@@ -1,0 +1,100 @@
+<div class="container-scroller">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Thành viên ưu tú</h4>
+                        <p class="card-description">Kỹ thuật viên hỗ trợ nhiều máy nhất</p>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Kỹ thuật viên</th>
+                                        <th>ID</th>
+                                        <th>Số máy đã hỗ trợ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topSupportTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Thành viên chăm chỉ</h4>
+                        <p class="card-description">Kỹ thuật viên đi trực nhiều nhất</p>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Kỹ thuật viên</th>
+                                        <th>ID</th>
+                                        <th>Số ngày trực</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="topAttendanceTable">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Load data khi trang được load
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            await Promise.all([
+                loadTopSupportTechnicians(),
+                loadTopAttendanceTechnicians()
+            ]);
+        } catch (error) {
+            showAlert('Lỗi khi tải dữ liệu thống kê');
+        }
+    });
+
+    // Load top support technicians
+    async function loadTopSupportTechnicians() {
+        try {
+            const response = await fetchWithAuth('/thanh-tich/top-ho-tro');
+            if (response.success) {
+                const tbody = document.getElementById('topSupportTable');
+                tbody.innerHTML = response.data.map(tech => `
+                    <tr>
+                        <td>${tech.hoten}</td>
+                        <td>${tech._id}</td>
+                        <td>${tech.supportCount}</td>
+                    </tr>
+                `).join('');
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải danh sách kỹ thuật viên hỗ trợ');
+        }
+    }
+
+    // Load top attendance technicians
+    async function loadTopAttendanceTechnicians() {
+        try {
+            const response = await fetchWithAuth('/thanh-tich/top-di-truc');
+            if (response.success) {
+                const tbody = document.getElementById('topAttendanceTable');
+                tbody.innerHTML = response.data.map(tech => `
+                    <tr>
+                        <td>${tech.hoten}</td>
+                        <td>${tech._id}</td>
+                        <td>${tech.attendanceCount}</td>
+                    </tr>
+                `).join('');
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải danh sách kỹ thuật viên đi trực');
+        }
+    }
+</script>

@@ -1,5 +1,897 @@
-<h1>Home page</h1>
+<div class="container-scroller">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-sm-4 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Kỹ thuật viên</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="d-flex d-sm-block d-md-flex align-items-center">
+                                    <div class="col-sm-6 col-md-4 col-lg-3" style="display: flex; align-items: center;">
+                                        <i class="text-success mdi mdi-checkbox-blank-circle"></i>
+                                        <h2 class="mb-0 pl-3" id="totalTechnicians">0</h2>
+                                    </div>
+                                </div>
+                                <h6 class="text-muted font-weight-normal">
+                                    Tổng số kỹ thuật viên
+                                </h6>
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-account-multiple-outline text-primary ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Yêu cầu hỗ trợ</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="col-sm-6 col-md-4 col-lg-3" style="display: flex; align-items: center;">
+                                    <i class="text-danger mdi mdi-comment"></i>
+                                    <h2 class="mb-0 pl-3" id="todayRequests">0</h2>
+                                </div>
+                                <h6 class="text-muted font-weight-normal">Số yêu cầu hôm nay</h6>
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-wallet-travel text-danger ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h5>Máy đã sửa</h5>
+                        <div class="row">
+                            <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                                <div class="col-sm-6 col-md-4 col-lg-3" style="display: flex; align-items: center;">
+                                    <i class="text-success mdi mdi-account-check mdi-24px"></i>
+                                    <h2 class="mb-0 pl-3" id="fixedDevices">0</h2>
+                                </div>
+                                <h6 class="text-muted font-weight-normal">Số máy đã bàn giao</h6>
+                            </div>
+                            <div class="col-4 col-sm-12 col-xl-4 text-center text-xl-right">
+                                <i class="icon-lg mdi mdi-monitor text-success ml-auto"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-12 grid-margin stretch-card">
+            <div class="card">
+                <div class="card-body">
+                    <h4 class="card-title">Danh sách kỹ thuật viên</h4>
+                    <br>
+                    <div class="table-responsive">
+                        <table class="table table-striped" id="techniciansList">
+                            <thead>
+                            <tr>
+                                <th> Ảnh đại diện</th>
+                                <th> Họ tên</th>
+                                <th> MSSV</th>
+                                <th> Trạng thái</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <nav>
+                            <ul class="pagination justify-content-center" id="techniciansListPagination">
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12 col-xl-6 pl-4 pr-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Sự kiện nổi bật</h4>
+                        <div class="owl-carousel owl-theme full-width owl-carousel-dash portfolio-carousel"
+                             id="owl-carousel-basic">
+                            {{#each (limit news 5)}}
+                                <div class="item" style="height: 100%; max-height: 300px;">
+                                    <img src="{{#if this.image}}{{this.image}}{{else}}/images/no-image.png{{/if}}" 
+                                         alt="{{this.title}}"
+                                         onclick="showNewsDetail('{{this._id}}')"
+                                         style="width: 100%; height: 100%; max-height: 300px; object-fit: cover;">
+                                </div>
+                            {{/each}}
+                        </div>
+                        <br>
+                        <div class="d-flex py-4">
+                            <div class="preview-list w-100">
+                                {{#each (limit news 5)}}
+                                    <div class="preview-item p-0" onclick="showNewsDetail('{{this._id}}')">
+                                        <div class="preview-item-content d-flex flex-grow">
+                                            <div class="flex-grow">
+                                                <div class="d-flex d-md-block d-xl-flex justify-content-between">
+                                                    <h6 class="preview-subject">{{this.title}}</h6>
+                                                    <p class="text-muted text-small">
+                                                        {{formatDate this.createdAt "DD/MM/YYYY"}}
+                                                    </p>
+                                                </div>
+                                                <p class="text-muted">{{this.title}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {{#unless @last}}<div class="border-bottom my-2"></div>{{/unless}}
+                                {{/each}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12 col-xl-6 pr-4 pl-4 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="card-title">Danh sách công việc</h4>
+                        <div class="add-items d-flex">
+                            <input type="text" class="form-control todo-list-input" placeholder="Nhập nội dung">
+                            <button class="add btn btn-primary todo-list-add-btn">Thêm</button>
+                        </div>
+                        <div class="list-wrapper">
+                            <ul class="d-flex flex-column-reverse text-white todo-list todo-list-custom">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-md-8 grid-margin stretch-card">
+                <div class="card shadow-sm border-0">
+                    <div class="card-header bg-info text-white text-center">
+                        <h5 class="card-title my-2">Nhập Thông Tin Yêu Cầu</h5>
+                    </div>
+                    <div class="card-body">
+                        <form id="requestForm">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="studentName" class="form-label">Tên sinh viên</label>
+                                        <input type="text" class="form-control" id="studentName"
+                                               placeholder="Nhập tên sinh viên"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="studentId" class="form-label fw-semibold">Mã số sinh viên</label>
+                                        <input type="text" class="form-control" id="studentId"
+                                               placeholder="Nhập mã số sinh viên"
+                                               maxlength="8" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="studentEmail" class="form-label fw-semibold">Email cá nhân</label>
+                                        <input type="email" class="form-control" id="studentEmail"
+                                               placeholder="Nhập email cá nhân"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="studentPhone" class="form-label fw-semibold">Số điện thoại</label>
+                                        <input type="text" class="form-control" id="studentPhone"
+                                               placeholder="Nhập số điện thoại"
+                                               required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="studentDevice" class="form-label fw-semibold">Loại máy</label>
+                                        <input type="text" class="form-control" id="studentDevice"
+                                               placeholder="Nhập loại máy"
+                                               required>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-group">
+                                        <label for="devicePassword" class="form-label fw-semibold">Mật khẩu máy (nếu có)</label>
+                                        <input type="text" class="form-control" id="devicePassword"
+                                               placeholder="Nhập mật khẩu máy (nếu có)">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 mb-3">
+                                    <div class="form-group">
+                                        <label for="dateSend" class="form-label fw-semibold">Ngày gửi máy</label>
+                                        <input type="date" class="form-control" id="dateSend" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group mb-4">
+                                <label for="requestContent" class="form-label">Nội dung yêu cầu</label>
+                                <textarea class="form-control" id="requestContent" rows="3"
+                                          placeholder="Nhập nội dung yêu cầu"
+                                          required></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-info px-5">Gửi yêu cầu</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal Xác nhận xóa -->
+<div class="modal fade" id="deleteConfirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa công việc này?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" onclick="closeDeleteModal()">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDeleteTodo()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Thêm modal vào cuối file -->
+<div class="modal fade" id="newsDetailModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="newsDetailTitle"></h5>
+                <button type="button" class="close" onclick="closeNewsDetailModal()">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-3 d-flex justify-content-center align-items-center">
+                    <img id="newsDetailImage" src="" alt="" 
+                         style="max-width: 100%; 
+                                height: auto; 
+                                max-height: 400px; 
+                                object-fit: contain; 
+                                margin: 0 auto;">
+                </div>
+                <div id="newsDetailContent" style="max-height: 1000px; overflow-y: auto;">
+                </div>
+                <div class="text-muted mt-2 text-right">
+                    <small id="newsDetailDate"></small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .pagination {
+        margin-top: 1rem;
+    }
 
-{{#each arr}}
-    <h1>{{this.id}}</h1>
-{{/each}}
+    .page-link {
+        background-color: transparent;
+        border-color: #2c2e33;
+        color: #6c7293;
+    }
+
+    .page-link:hover {
+        background-color: #2c2e33;
+        border-color: #2c2e33;
+        color: #ffffff;
+    }
+
+    .page-item.active .page-link {
+        background-color: #010057;
+        border-color: #010057;
+        color: #fff;
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #191c24;
+        border-color: #2c2e33;
+        color: #3b3e56;
+    }
+
+    .modal-content {
+        background-color: #191c24;
+        color: #fff;
+    }
+
+    .modal-header {
+        border-bottom: 1px solid #2c2e33;
+    }
+
+    .modal-header .close {
+        color: #fff;
+        opacity: 0.8;
+    }
+
+    .modal-header .close:hover {
+        opacity: 1;
+    }
+
+    #newsDetailContent {
+        line-height: 1.6;
+        text-align: justify;
+    }
+
+    #newsDetailContent img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* Thêm style cho news items */
+    .preview-item {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .preview-item:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+        transform: translateX(5px);
+        box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-item.deleted {
+        opacity: 0.5;
+    }
+
+    .preview-item.deleted:hover {
+        opacity: 0.7;
+    }
+
+    /* Đảm bảo các item trong list không bị tràn */
+    .preview-item {
+        width: 100%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    /* Style cho table container */
+    .table-responsive {
+        width: 100%;
+    }
+
+    /* Style cho table */
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+        border: 1px solid #2c2e33;
+        border-spacing: 0;
+    }
+
+    /* Column widths */
+    .table th:nth-child(1) { width: 15%; }  /* Ảnh đại diện */
+    .table th:nth-child(2) { width: 35%; }  /* Họ tên */
+    .table th:nth-child(3) { width: 25%; }  /* MSSV */
+    .table th:nth-child(4) { width: 25%; }  /* Trạng thái */
+
+    /* Style cho các cell trong table */
+    .table td {
+        text-align: left;
+        padding: 12px;
+        vertical-align: middle;
+    }
+
+    /* Style cho ảnh avatar */
+    .table td img {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: block;
+        margin: 0 auto;
+    }
+
+    /* Responsive styles */
+    @media screen and (max-width: 992px) {
+        .table-responsive {
+            border: none;
+        }
+
+        .table thead {
+            display: none;
+        }
+
+        .table tbody tr {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 3px solid #2c2e33;
+            padding: 1rem;
+        }
+
+        .table td {
+            display: block;
+            text-align: right;
+            padding: 0.5rem 0;
+            border: none;
+        }
+
+        .table td:before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        /* Xử lý riêng cho cột ảnh đại diện */
+        .table td:first-child {
+            text-align: center;
+        }
+
+        .table td:first-child:before {
+            display: none;
+        }
+
+        .table td img {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto;
+        }
+    }
+
+    /* Style cho các row có background xen kẽ */
+    .table-striped tbody tr:nth-of-type(odd) {
+        background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Style cho badge */
+    .table td .badge {
+        display: inline-block;
+        width: auto;
+        text-align: center;
+        padding: 8px;
+        margin: 0;
+        white-space: normal;
+        line-height: 1.2;
+    }
+
+    /* Điều chỉnh responsive cho badge */
+    @media screen and (max-width: 992px) {
+        .table td .badge {
+            width: auto;
+            min-width: 75px;
+            float: right;
+        }
+        
+        /* Đảm bảo badge không bị đè bởi label */
+        .table td[data-label="Trạng thái"] {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .table td[data-label="Trạng thái"]::before {
+            margin-right: auto;
+        }
+    }
+    /* CSS cho video iframe */
+    .parent_container_iframe {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    .video_container_iframe {
+        aspect-ratio: 16 / 9;
+        width: 90% !important;
+        height: auto !important;
+        padding-bottom: 0 !important;
+    }
+
+    .video_iframe {
+        position: relative !important;
+    }
+</style>
+<script>
+    document.getElementById('requestForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const formData = {
+            studentName: document.getElementById('studentName').value,
+            studentId: document.getElementById('studentId').value,
+            studentEmail: document.getElementById('studentEmail').value,
+            studentPhone: document.getElementById('studentPhone').value,
+            studentDevice: document.getElementById('studentDevice').value,
+            devicePassword: document.getElementById('devicePassword').value,
+            dateSend: document.getElementById('dateSend').value,
+            requestContent: document.getElementById('requestContent').value
+        };
+
+        try {
+            const response = await fetchWithAuth('/trang-chu/yeu-cau-ho-tro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.success) {
+                showAlert('Gửi yêu cầu thành công', 'success');
+                e.target.reset();
+                loadDashboardData(); // Refresh dashboard stats
+            } else {
+                showAlert(response.message);
+            }
+        } catch (error) {
+            showAlert('Đã có lỗi xảy ra');
+        }
+    });
+
+    async function loadDashboardStats() {
+        try {
+            const response = await fetchWithAuth('/trang-chu/thong-ke');
+            if (response.success) {
+                const stats = response.data;
+
+                // Cập nhật số liệu kỹ thuật viên
+                document.getElementById('totalTechnicians').textContent = stats.totalTechnicians;
+
+                // Cập nhật số yêu cầu hôm nay
+                document.getElementById('todayRequests').textContent = stats.todayRequests;
+
+                // Cập nhật số máy đã sửa
+                document.getElementById('fixedDevices').textContent = stats.fixedDevices;
+            }
+        } catch (error) {
+            console.error('Error in loadDashboardStats:', error);
+            showAlert('Lỗi khi tải dữ liệu thống kê');
+        }
+    }
+
+    let currentPage = 1;
+    const itemsPerPage = 5;
+    let techniciansData = [];
+
+    async function loadTechniciansList() {
+        try {
+            const response = await fetchWithAuth('/trang-chu/ky-thuat-vien');
+            if (response.success) {
+                techniciansData = response.data;
+                renderTechnicians();
+                renderPagination();
+            }
+        } catch (error) {
+            console.error('Error loading technicians list:', error);
+            showAlert('Lỗi khi tải danh sách kỹ thuật viên');
+        }
+    }
+
+    function renderTechnicians() {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const currentTechnicians = techniciansData.slice(startIndex, endIndex);
+
+        const techniciansList = document.getElementById('techniciansList').querySelector('tbody');
+        techniciansList.innerHTML = currentTechnicians.map(tech => `
+        <tr>
+            <td data-label="Ảnh đại diện" class="py-1">
+                <img src="${tech.avatar}" alt="avatar"/>
+            </td>
+            <td data-label="Họ tên">${tech.fullName}</td>
+            <td data-label="MSSV">${tech.studentId}</td>
+            <td data-label="Trạng thái">
+                <div class="badge badge-outline-${tech.status === 'Đang hoạt động' ? 'success' : 'danger'}">
+                    ${tech.status}
+                </div>
+            </td>
+        </tr>
+    `).join('');
+    }
+
+    function renderPagination() {
+        const totalPages = Math.ceil(techniciansData.length / itemsPerPage);
+        const pagination = document.getElementById('techniciansListPagination');
+        let paginationHTML = '';
+
+        // Previous button
+        paginationHTML += `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
+        </li>
+    `;
+
+        // Page numbers
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                paginationHTML += `
+                <li class="page-item ${currentPage === i ? 'active' : ''}">
+                    <a class="page-link" href="#" data-page="${i}">${i}</a>
+                </li>
+            `;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                paginationHTML += `
+                <li class="page-item disabled">
+                    <span class="page-link">...</span>
+                </li>
+            `;
+            }
+        }
+
+        // Next button
+        paginationHTML += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
+        </li>
+    `;
+
+        pagination.innerHTML = paginationHTML;
+
+        // Add event listeners to pagination buttons
+        pagination.querySelectorAll('.page-link').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.preventDefault();
+                const newPage = parseInt(e.target.dataset.page);
+                if (!isNaN(newPage) && newPage !== currentPage && newPage > 0 && newPage <= totalPages) {
+                    currentPage = newPage;
+                    renderTechnicians();
+                    renderPagination();
+                }
+            });
+        });
+    }
+
+    async function loadDashboardData() {
+        await Promise.all([
+            loadDashboardStats(),
+            loadTechniciansList()
+        ]);
+    }
+
+    async function loadTodoList() {
+        try {
+            const response = await fetchWithAuth('/trang-chu/todos');
+            if (response.success) {
+                const todoList = document.querySelector('.todo-list');
+                todoList.innerHTML = response.data.map(todo => `
+                <li class="${todo.isCompleted ? 'completed' : ''}">
+                    <div class="form-check form-check-primary">
+                        <label class="form-check-label">
+                            <input class="checkbox" type="checkbox"
+                                ${todo.isCompleted ? 'checked' : ''} 
+                                onchange="toggleTodo('${todo._id}')">
+                            <i class="input-helper"></i>
+                            ${todo.content}
+                        </label>
+                    </div>
+                    <i class="remove mdi mdi-close-box" 
+                       onclick="handleDeleteClick(event, '${todo._id}')"
+                       style="pointer-events: auto;"></i>
+                </li>
+            `).join('');
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải danh sách công việc');
+        }
+    }
+
+    async function addTodo() {
+        const input = document.querySelector('.todo-list-input');
+        const content = input.value.trim();
+        if (!content) return;
+
+        try {
+            const response = await fetchWithAuth('/trang-chu/todos', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content })
+            });
+
+            if (response.success) {
+                input.value = '';
+                await loadTodoList();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi thêm công việc');
+        }
+    }
+
+    async function toggleTodo(id) {
+        try {
+            const response = await fetchWithAuth(`/trang-chu/todos/${id}/toggle`, {
+                method: 'PUT'
+            });
+
+            if (response && response.success) {
+                await loadTodoList();
+            } else {
+                showAlert('Lỗi khi cập nhật trạng thái');
+            }
+        } catch (error) {
+            showAlert('Lỗi khi cập nhật trạng thái');
+        }
+    }
+
+
+    // Add event listeners
+    document.querySelector('.todo-list-add-btn').addEventListener('click', addTodo);
+    document.querySelector('.todo-list-input').addEventListener('keypress', e => {
+        if (e.key === 'Enter') addTodo();
+    });
+
+    // Load todos when page loads
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            await loadDashboardData();
+            await loadTodoList();
+        } catch (error) {
+            console.error('Error:', error);
+            showAlert('Lỗi khi tải dữ liệu');
+        }
+    });
+
+    let todoToDelete = null;
+    const deleteModal = document.getElementById('deleteConfirmModal');
+
+    function showDeleteModal() {
+        deleteModal.classList.add('show');
+        deleteModal.style.display = 'block';
+        document.body.classList.add('modal-open');
+
+        // Thêm backdrop
+        const backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop fade show';
+        document.body.appendChild(backdrop);
+    }
+
+    function closeDeleteModal() {
+        deleteModal.classList.remove('show');
+        deleteModal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+
+        // Xóa backdrop
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+        }
+    }
+
+    async function deleteTodo(id) {
+        todoToDelete = id;
+        showDeleteModal();
+    }
+
+    async function confirmDeleteTodo() {
+        try {
+            await fetchWithAuth(`/trang-chu/todos/${todoToDelete}`, { method: 'DELETE' });
+            closeDeleteModal();
+            await loadTodoList();
+            showAlert('Xóa công việc thành công', 'success');
+        } catch (error) {
+            showAlert('Lỗi khi xóa công việc');
+        }
+        todoToDelete = null;
+    }
+
+    // Thêm event listener cho nút close
+    document.querySelector('.modal .close').addEventListener('click', closeDeleteModal);
+
+    // Đóng modal khi click ra ngoài
+    deleteModal.addEventListener('click', function(event) {
+        if (event.target === deleteModal) {
+            closeDeleteModal();
+        }
+    });
+
+    // Thêm hàm mới để xử lý click vào icon remove
+    function handleDeleteClick(event, id) {
+        // Ngăn chặn sự kiện mặc định và bubble
+        event.preventDefault();
+        event.stopPropagation();
+
+        // Gọi hàm xóa
+        deleteTodo(id);
+    }
+
+    async function showNewsDetail(id) {
+        try {
+            const response = await fetchWithAuth(`/admin/tin-tuc/${id}`);
+            if (response.success) {
+                const news = response.data;
+                
+                // Cập nhật nội dung modal
+                document.getElementById('newsDetailTitle').textContent = news.title;
+                document.getElementById('newsDetailContent').innerHTML = news.content;
+                
+                // Xử lý video từ CKEditor
+                document.querySelectorAll('div[data-oembed-url]').forEach(element => {
+                    element.classList.add('parent_container_iframe');
+
+                    let child = element.firstChild;
+                    child.classList.add('video_container_iframe');
+
+                    let iframe = child.firstChild;
+                    iframe.classList.add('video_iframe');
+                });
+                
+                // Xử lý ảnh
+                const imageElement = document.getElementById('newsDetailImage');
+                if (news.image) {
+                    imageElement.src = news.image;
+                    imageElement.style.display = 'block';
+                } else {
+                    imageElement.style.display = 'none';
+                }
+                
+                // Format và hiển thị ngày
+                const date = new Date(news.createdAt);
+                document.getElementById('newsDetailDate').textContent = date.toLocaleDateString('vi-VN', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+
+                // Hiển thị modal
+                const modal = document.getElementById('newsDetailModal');
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                document.body.classList.add('modal-open');
+                
+                // Thêm backdrop
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            }
+        } catch (error) {
+            console.error('Error loading news detail:', error);
+            showAlert('Lỗi khi tải chi tiết tin tức');
+        }
+    }
+
+    function closeNewsDetailModal() {
+        const modal = document.getElementById('newsDetailModal');
+        modal.style.display = 'none';
+        modal.classList.remove('show');
+        document.body.classList.remove('modal-open');
+        
+        // Xóa backdrop
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+        }
+        
+        // Reset scroll
+        modal.querySelector('.modal-body').scrollTop = 0;
+    }
+
+    // Thêm event listeners khi trang load
+    document.addEventListener('DOMContentLoaded', function() {
+        const modal = document.getElementById('newsDetailModal');
+        
+        // Xử lý nút đóng
+        const closeButtons = document.querySelectorAll('[data-dismiss="modal"]');
+        closeButtons.forEach(button => {
+            button.onclick = closeNewsDetailModal;
+        });
+        
+        // Xử lý click bên ngoài modal
+        modal.addEventListener('click', function(event) {
+            // Nếu click vào chính modal dialog, không làm gì
+            if (event.target.closest('.modal-content')) {
+                return;
+            }
+            // Nếu click ra ngoài, đóng modal
+            closeNewsDetailModal();
+        });
+    });
+</script>

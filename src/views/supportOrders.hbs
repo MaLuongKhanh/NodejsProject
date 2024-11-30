@@ -1,0 +1,834 @@
+<div class="container-scroller">
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-12 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="text-center">Danh sách yêu cầu hỗ trợ</h4>
+                        <br>
+                        <div class="form-group col-12 mx-auto d-flex justify-content-center">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="searchInput"
+                                       style="color: white;" placeholder="Tìm kiếm...">
+                                <button type="button" class="btn btn-info btn-icon-text" style="border-radius: 0;">
+                                    <i class="mdi mdi-account-search" style="margin-right: 0;"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive-stack">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>Họ và tên <i class="mdi mdi-sort-ascending sort-icon" onclick="sortTable(0, this)"></i></th>
+                                    <th>Số điện thoại</th>
+                                    <th>Hỗ trợ</th>
+                                    <th>Mật khẩu</th>
+                                    <th>Ngày gửi <i class="mdi mdi-sort-ascending sort-icon" onclick="sortTable(4, this)"></i></th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Data will be rendered here -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Pagination -->
+                        <div class="d-flex justify-content-center mt-4">
+                            <ul class="pagination">
+                                <!-- Pagination will be rendered here -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Chỉnh sửa yêu cầu</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Họ tên</label>
+                                <input type="text" class="form-control" id="editHoten" required>
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <label>Mã khách hàng</label>
+                                <input type="text" class="form-control" id="editMaKH" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Số điện thoại</label>
+                                <input type="text" class="form-control" id="editSdt">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" id="editEmail">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Tên máy</label>
+                                <input type="text" class="form-control" id="editTenmay" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Loại hỗ trợ</label>
+                                <input type="text" class="form-control" id="editLoaihotro" required>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Mật khẩu máy</label>
+                                <input type="text" class="form-control" id="editMatkhau">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Trạng thái</label>
+                                <select class="form-control" id="editTrangthai">
+                                    <option value="chờ">Chờ</option>
+                                    <option value="tiếp nhận">Tiếp nhận</option>
+                                    <option value="bàn giao máy">Bàn giao máy</option>
+                                    <option value="từ chối">Từ chối</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" onclick="saveEdit()">Lưu</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Xác nhận xóa</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Bạn có chắc chắn muốn xóa yêu cầu này?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-danger" onclick="confirmDelete()">Xóa</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let allOrders = [];
+    let currentPage = 1;
+    const itemsPerPage = 10;
+    let currentEditId = null;
+    let currentDeleteId = null;
+    const currentUser={{{json currentUser}}};
+
+    async function loadOrders() {
+        try {
+            const response = await fetchWithAuth('/tiep-nhan-ho-tro/danh-sach');
+            if (response.success) {
+                allOrders = response.data;
+                renderOrders();
+                renderPagination();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải danh sách yêu cầu', error);
+        }
+    }
+
+    function getStatusBadgeClass(status) {
+        switch(status) {
+            case 'chờ': return 'secondary';
+            case 'tiếp nhận': return 'primary';
+            case 'bàn giao máy': return 'success';
+            case 'từ chối': return 'danger';
+            default: return 'secondary';
+        }
+    }
+
+    function renderActionButtons(order) {
+        if (order.trangthai === 'chờ') {
+            return `
+            <button type="button" class="btn btn-success btn-rounded" onclick="updateStatus('${order._id}', 'tiếp nhận')">
+                <i class="mdi mdi-check"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-rounded" onclick="updateStatus('${order._id}', 'từ chối')">
+                <i class="mdi mdi-close"></i>
+            </button>
+        `;
+        } else if (order.trangthai === 'tiếp nhận' && (order.mssv === currentUser.mssv || currentUser.role === 'admin')) {
+            return `
+            <button type="button" class="btn btn-info btn-rounded" onclick="updateStatus('${order._id}', 'bàn giao máy')">
+                <i class="mdi mdi-laptop"></i> Bàn giao
+            </button>
+        `;
+        }
+        return '';
+    }
+
+    function renderEditButton(order) {
+        if (order.trangthai !== 'tiếp nhận' && order.trangthai !== 'chờ' && 
+            (order.mssv === currentUser.mssv || currentUser.role === 'admin')) {
+            return `
+            <button type="button" class="btn btn-warning btn-icon-text" onclick="showEditModal('${order._id}')">
+                <i class="mdi mdi-pencil"></i>
+            </button>
+            <button type="button" class="btn btn-danger btn-icon-text" onclick="showDeleteModal('${order._id}')">
+                <i class="mdi mdi-delete"></i>
+            </button>
+        `;
+        }
+        return '';
+    }
+
+    function showEditModal(id) {
+        currentEditId = id;
+        const order = allOrders.find(o => o._id === id);
+        if (!order) return;
+
+        // Fill form data
+        document.getElementById('editHoten').value = order.hoten;
+        document.getElementById('editMaKH').value = order.maKH;
+        document.getElementById('editSdt').value = order.sdt || '';
+        document.getElementById('editEmail').value = order.email || '';
+        document.getElementById('editTenmay').value = order.tenmay;
+        document.getElementById('editLoaihotro').value = order.loaihotro;
+        document.getElementById('editMatkhau').value = order.matkhau || '';
+        document.getElementById('editTrangthai').value = order.trangthai;
+
+        // Show modal
+        const modal = document.getElementById('editModal');
+        modal.classList.add('show');
+        modal.style.display = 'block';
+        document.body.classList.add('modal-open');
+
+        // Add backdrop
+        if (!document.querySelector('.modal-backdrop')) {
+            const backdrop = document.createElement('div');
+            backdrop.className = 'modal-backdrop fade show';
+            document.body.appendChild(backdrop);
+        }
+    }
+
+    function hideEditModal() {
+        const modal = document.getElementById('editModal');
+        modal.classList.remove('show');
+        modal.style.display = 'none';
+        document.body.classList.remove('modal-open');
+
+        // Remove backdrop
+        const backdrop = document.querySelector('.modal-backdrop');
+        if (backdrop) {
+            backdrop.remove();
+        }
+    }
+
+    function showDeleteModal(id) {
+        currentDeleteId = id;
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.style.display = 'block';
+        deleteModal.classList.add('show');
+    }
+
+    function hideDeleteModal() {
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.style.display = 'none';
+        deleteModal.classList.remove('show');
+    }
+
+    // Close modals when clicking outside
+    window.onclick = function(event) {
+        const editModal = document.getElementById('editModal');
+        const deleteModal = document.getElementById('deleteModal');
+        if (event.target === editModal) {
+            hideEditModal();
+        }
+        if (event.target === deleteModal) {
+            hideDeleteModal();
+        }
+    }
+
+    // Close modals when clicking close button
+    document.querySelectorAll('[data-dismiss="modal"]').forEach(button => {
+        button.onclick = function() {
+            const modal = this.closest('.modal');
+            if (modal.id === 'editModal') {
+                hideEditModal();
+            } else if (modal.id === 'deleteModal') {
+                hideDeleteModal();
+            }
+        }
+    });
+
+    async function saveEdit() {
+        const formData = {
+            hoten: document.getElementById('editHoten').value,
+            maKH: document.getElementById('editMaKH').value,
+            sdt: document.getElementById('editSdt').value,
+            email: document.getElementById('editEmail').value,
+            tenmay: document.getElementById('editTenmay').value,
+            loaihotro: document.getElementById('editLoaihotro').value,
+            matkhau: document.getElementById('editMatkhau').value || '',
+            trangthai: document.getElementById('editTrangthai').value
+        };
+
+        try {
+            const response = await fetchWithAuth(`/tiep-nhan-ho-tro/${currentEditId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.success) {
+                hideEditModal();
+                loadOrders();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi cập nhật yêu cầu');
+        }
+    }
+
+    async function confirmDelete() {
+        if (!currentDeleteId) return;
+
+        try {
+            const response = await fetchWithAuth(`/tiep-nhan-ho-tro/${currentDeleteId}`, {
+                method: 'DELETE'
+            });
+
+            if (response.success) {
+                hideDeleteModal();
+                loadOrders();
+            }
+        } catch (error) {
+            showAlert('Lỗi khi xóa yêu cầu');
+        }
+    }
+
+    async function updateStatus(id, status) {
+        try {
+            const response = await fetchWithAuth(`/tiep-nhan-ho-tro/trang-thai/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status })
+            });
+            if (response.success) {
+                loadOrders();
+                showAlert(response.message);
+            }
+        } catch (error) {
+            showAlert('Lỗi khi cập nhật trạng thái', error);
+        }
+    }
+
+    // Search functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+        const searchTerm = e.target.value.toLowerCase();
+        const filteredOrders = allOrders.filter(order =>
+                order.hoten.toLowerCase().includes(searchTerm) ||
+                order.maKH.toLowerCase().includes(searchTerm) ||
+                order.loaihotro.toLowerCase().includes(searchTerm)
+        );
+
+        currentPage = 1;
+        renderOrders(filteredOrders);
+        renderPagination(filteredOrders.length);
+    });
+
+    // Load orders when page loads
+    document.addEventListener('DOMContentLoaded', loadOrders);
+
+    function renderOrders(orders = allOrders) {
+        const startIndex = (currentPage - 1) * itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const ordersToShow = orders.slice(startIndex, endIndex);
+
+        const tbody = document.querySelector('table tbody');
+        tbody.innerHTML = ordersToShow.map(order => `
+        <tr>
+            <td data-label="Họ và tên">${order.hoten}</td>
+            <td data-label="Số điện thoại">${order.sdt || ''}</td>
+            <td data-label="Hỗ trợ">${order.loaihotro}</td>
+            <td data-label="Mật khẩu">${order.matkhau || ''}</td>
+            <td data-label="Ngày gửi">${new Date(order.ngaygui).toLocaleDateString('vi-VN')}</td>
+            <td data-label="Trạng thái">
+                <div class="badge badge-outline-${getStatusBadgeClass(order.trangthai)}">${order.trangthai}</div>
+            </td>
+            <td data-label="Thao tác" class="action-column">
+                ${renderActionButtons(order)}
+                ${renderEditButton(order)}
+            </td>
+        </tr>
+    `).join('');
+    }
+
+    function renderPagination(totalItems = allOrders.length) {
+        const totalPages = Math.ceil(totalItems / itemsPerPage);
+        const pagination = document.querySelector('.pagination');
+
+        let paginationHTML = `
+        <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${currentPage - 1})">Trước</a>
+        </li>
+    `;
+
+        for (let i = 1; i <= totalPages; i++) {
+            paginationHTML += `
+            <li class="page-item ${currentPage === i ? 'active' : ''}">
+                <a class="page-link" href="#" onclick="changePage(${i})">${i}</a>
+            </li>
+        `;
+        }
+
+        paginationHTML += `
+        <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
+            <a class="page-link" href="#" onclick="changePage(${currentPage + 1})">Sau</a>
+        </li>
+    `;
+
+        pagination.innerHTML = paginationHTML;
+    }
+
+    function changePage(page) {
+        const totalPages = Math.ceil(allOrders.length / itemsPerPage);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderOrders();
+        renderPagination();
+    }
+
+    function sortTable(columnIndex, icon) {
+        const sortOrder = icon.classList.contains('mdi-sort-ascending') ? 'desc' : 'asc';
+
+        // Reset all icons
+        document.querySelectorAll('.sort-icon').forEach(i => {
+            i.classList.remove('mdi-sort-ascending', 'mdi-sort-descending');
+            i.classList.add('mdi-sort-ascending');
+        });
+
+        // Update current icon
+        icon.classList.remove('mdi-sort-ascending', 'mdi-sort-descending');
+        icon.classList.add(sortOrder === 'asc' ? 'mdi-sort-ascending' : 'mdi-sort-descending');
+
+        // Map column index to data key
+        const key = columnIndex === 0 ? 'hoten' : columnIndex === 4 ? 'ngaygui' : null;
+        if (!key) return;
+
+        allOrders.sort((a, b) => {
+            let valueA, valueB;
+
+            if (key === 'ngaygui') {
+                valueA = new Date(a[key]);
+                valueB = new Date(b[key]);
+            } else {
+                valueA = (a[key] || '').toLowerCase();
+                valueB = (b[key] || '').toLowerCase();
+            }
+
+            if (sortOrder === 'asc') {
+                return valueA < valueB ? -1 : valueA > valueB ? 1 : 0;
+            } else {
+                return valueA > valueB ? -1 : valueA < valueB ? 1 : 0;
+            }
+        });
+
+        renderOrders();
+    }
+
+</script>
+
+<style>
+    .pagination {
+        margin-top: 1rem;
+    }
+
+    .page-link {
+        background-color: transparent;
+        border-color: #2c2e33;
+        color: #6c7293;
+    }
+
+    .page-link:hover {
+        background-color: #2c2e33;
+        border-color: #2c2e33;
+        color: #ffffff;
+    }
+
+    .page-item.active .page-link {
+        background-color: #010057;
+        border-color: #010057;
+        color: #fff;
+    }
+
+    .page-item.disabled .page-link {
+        background-color: #191c24;
+        border-color: #2c2e33;
+        color: #3b3e56;
+    }
+
+    /* Modal responsive styles */
+    @media (max-width: 768px) {
+        .modal-dialog {
+            margin: 0.5rem;
+        }
+
+        .modal-content {
+            width: 100%;
+        }
+
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 0.75rem;
+        }
+
+        .row {
+            margin-left: -5px;
+            margin-right: -5px;
+        }
+
+        .col-12 {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+    }
+
+    /* Table responsive styles */
+    @media (max-width: 992px) {
+        .table td, .table th {
+            padding: 0.5rem;
+            font-size: 0.875rem;
+        }
+
+        .btn-rounded {
+            padding: 0.25rem 0.5rem;
+        }
+
+        .badge {
+            font-size: 0.75rem;
+        }
+    }
+
+    /* Search box responsive */
+    @media (max-width: 576px) {
+        .input-group {
+            width: 100%;
+        }
+
+        .form-group.col-12 {
+            padding: 0 0.5rem;
+        }
+    }
+
+    /* Modal backdrop fix */
+    .modal-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    /* Modal centering and sizing */
+    .modal-dialog {
+        max-width: 90%;
+        margin: 1.75rem auto;
+    }
+
+    @media (min-width: 992px) {
+        .modal-dialog {
+            max-width: 500px;
+        }
+    }
+
+    /* Form control spacing */
+    .form-control {
+        margin-bottom: 0.5rem;
+    }
+
+    /* Button spacing in modal footer */
+    .modal-footer {
+        flex-wrap: wrap;
+        gap: 0.5rem;
+    }
+
+    /* Modal animation */
+    .modal.fade .modal-dialog {
+        transition: transform .3s ease-out;
+    }
+
+    .modal.show .modal-dialog {
+        transform: none;
+    }
+
+    /* Table responsive styles */
+    @media screen and (max-width: 992px) {
+        .table-responsive-stack tr {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 3px solid #2c2e33;
+            margin-bottom: 1rem;
+        }
+
+        .table-responsive-stack td,
+        .table-responsive-stack th {
+            display: block;
+            text-align: left;
+            padding: 0.75rem;
+            border: none;
+            min-width: auto;
+            white-space: normal;
+            width: 100%;
+        }
+
+        .table-responsive-stack thead {
+            display: none;
+        }
+
+        .table-responsive-stack td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+            margin-right: 1rem;
+        }
+    }
+
+    /* Thêm màu nền xen kẽ cho các row trên mobile */
+    @media screen and (max-width: 992px) {
+        .table-responsive-stack tr:nth-child(odd) {
+            background-color: rgba(0,0,0,0.05);
+        }
+    }
+
+    /* Table responsive styles */
+    @media screen and (max-width: 1400px) {
+        .table {
+            display: block;
+            width: 100%;
+        }
+
+        .table th {
+            white-space: nowrap;
+            min-width: 120px;
+        }
+
+        /* Cột ngày gửi */
+        .table th:nth-child(6) {
+            min-width: 100px;
+        }
+
+        /* Cột trạng thái */
+        .table th:nth-child(7) {
+            min-width: 100px;
+        }
+
+        /* Cột thao tác và chỉnh sửa */
+        .table th:nth-child(8),
+        .table th:nth-child(9) {
+            min-width: 80px;
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        .table-responsive-stack tr {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 3px solid #2c2e33;
+            margin-bottom: 1rem;
+        }
+
+        .table-responsive-stack td,
+        .table-responsive-stack th {
+            display: block;
+            text-align: left;
+            padding: 0.75rem;
+            border: none;
+            min-width: auto;
+            white-space: normal;
+        }
+
+        .table-responsive-stack thead {
+            display: none;
+        }
+
+        .table-responsive-stack td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+            margin-right: 1rem;
+        }
+    }
+
+    /* Thêm padding cho card body */
+    .card-body {
+        padding: 1.5rem;
+    }
+
+    /* Giới hạn chiều rộng tối đa của bảng */
+    .table-responsive-stack {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .table {
+        width: 100%;
+        margin-bottom: 1rem;
+        min-width: 1000px;
+    }
+
+    /* Column widths */
+    .table th:nth-child(1) { width: 20%; }  /* Họ tên */
+    .table th:nth-child(2) { width: 15%; }  /* SĐT */
+    .table th:nth-child(3) { width: 15%; }  /* Hỗ trợ */
+    .table th:nth-child(4) { width: 15%; }  /* Mật khẩu */
+    .table th:nth-child(5) { width: 12%; }  /* Ngày gửi */
+    .table th:nth-child(6) { width: 10%; }  /* Trạng thái */
+    .table th:nth-child(7) { width: 13%; }  /* Thao tác */
+
+    /* Responsive styles */
+    @media screen and (max-width: 992px) {
+        .table {
+            min-width: auto;
+        }
+
+        .table-responsive-stack {
+            overflow-x: hidden;
+        }
+
+        .table-responsive-stack tr {
+            display: flex;
+            flex-direction: column;
+            border-bottom: 3px solid #2c2e33;
+            margin-bottom: 1rem;
+        }
+
+        .table-responsive-stack td,
+        .table-responsive-stack th {
+            display: block;
+            text-align: left;
+            padding: 0.75rem;
+            border: none;
+            min-width: auto;
+            white-space: normal;
+            width: 100%;
+        }
+
+        .table-responsive-stack thead {
+            display: none;
+        }
+
+        .table-responsive-stack td::before {
+            content: attr(data-label);
+            font-weight: bold;
+            display: inline-block;
+            width: 120px;
+            margin-right: 1rem;
+        }
+    }
+
+    /* Thêm style cho thanh cuộn */
+    .table-responsive-stack::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .table-responsive-stack::-webkit-scrollbar-track {
+        background: #2c2e33;
+    }
+
+    .table-responsive-stack::-webkit-scrollbar-thumb {
+        background: #6c7293;
+        border-radius: 4px;
+    }
+
+    .table-responsive-stack::-webkit-scrollbar-thumb:hover {
+        background: #8f95b9;
+    }
+
+    /* Style cho các cell trong table */
+    .table td {
+        text-align: left; /* Căn phải cho text */
+        padding-right: 20px; /* Thêm padding bên phải */
+    }
+
+    /* Giữ nguyên căn trái cho badge trạng thái */
+    .table td .badge {
+        text-align: center;
+    }
+
+    /* Giữ nguyên căn giữa cho cột action */
+    .table td.action-column {
+        text-align: center;
+    }
+
+    /* Điều chỉnh responsive */
+    @media screen and (max-width: 992px) {
+        .table-responsive-stack td::before {
+            float: left; /* Label float về bên trái */
+            text-align: left; /* Label căn trái */
+        }
+        
+        .table-responsive-stack td {
+            text-align: right; /* Content căn phải */
+            padding-right: 0; /* Reset padding right */
+        }
+        
+        /* Giữ nguyên căn giữa cho action buttons trên mobile */
+        .table-responsive-stack td.action-column {
+            text-align: left;
+        }
+    }
+    .table {
+    width: 100%;
+    margin-bottom: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    display: table;
+    min-width: auto;
+}
+</style>

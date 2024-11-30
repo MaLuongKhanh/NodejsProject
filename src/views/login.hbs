@@ -1,0 +1,245 @@
+<div class="card col-lg-4 mx-auto" style="border-radius: 5%;">
+    <div class="card-body px-5 py-5">
+        <h3 class="card-title text-left mb-3">Đăng nhập</h3>
+        
+        <form id="loginForm">
+            <div id="errorAlert" class="alert alert-danger" style="display: none;">
+            </div>
+
+            <div class="form-group">
+                <label for="username">Tài khoản *</label>
+                <input type="text" class="form-control p_input" id="username" name="username" placeholder="Nhập tài khoản" required>
+                <span class="text-danger username-error"></span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Mật khẩu</label>
+                <div class="input-group">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Nhập mật khẩu">
+                    <div class="input-group-append">
+                        <span class="input-group-text" onclick="togglePassword()">
+                            <i class="mdi mdi-eye-off" id="togglePassword"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="custom-control custom-checkbox">
+                        <input type="checkbox" class="custom-control-input" id="rememberMe">
+                        <label class="custom-control-label" for="rememberMe">Nhớ mật khẩu</label>
+                    </div>
+                    <a href="/quen-mat-khau" class="forgot-pass text-info">Quên mật khẩu?</a>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-info btn-block enter-btn">Đăng nhập</button>
+            </div>
+        </form>
+
+        <p class="sign-up">Chưa có tài khoản? <a href="/dang-ky">Đăng ký ngay</a></p>
+    </div>
+</div>
+
+<div class="modal fade" id="lockedAccountModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tài khoản bị khóa</h5>
+                <button type="button" class="close" data-dismiss="modal">
+                    <span>&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Tài khoản của bạn đã bị khóa. Vui lòng liên hệ Admin để được hỗ trợ!</p>
+                <div class="text-center mt-3">
+                    <a href="mailto:admin@example.com" class="btn btn-info">
+                        <i class="mdi mdi-email"></i> Liên hệ Admin
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.input-group-text {
+    cursor: pointer;
+    background-color: transparent;
+    border-left: none;
+}
+
+.form-control {
+    border-right: none;
+}
+
+.mdi-eye, .mdi-eye-off {
+    color: #6c7293;
+}
+
+.input-group-text:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+/* Style cho checkbox */
+.custom-control-input:checked ~ .custom-control-label::before {
+    border-color: #00d25b;
+    background-color: #00d25b;
+}
+
+.custom-checkbox .custom-control-label::before {
+    border-radius: 0.25rem;
+}
+.form-group label {
+    line-height: 2;
+}
+
+.forgot-pass {
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.forgot-pass:hover {
+    text-decoration: underline;
+}
+
+.custom-control-label {
+    font-size: 14px;
+}
+
+#lockedAccountModal .modal-content {
+    background: #191c24;
+    color: #fff;
+}
+
+#lockedAccountModal .modal-header {
+    border-bottom: 1px solid #2c2e33;
+}
+
+#lockedAccountModal .close {
+    color: #fff;
+}
+
+#lockedAccountModal .modal-body {
+    padding: 1.5rem;
+}
+</style>
+
+<script>
+// Kiểm tra và điền thông tin đăng nhập đã lưu
+document.addEventListener('DOMContentLoaded', () => {
+    const savedCredentials = localStorage.getItem('savedCredentials');
+    if (savedCredentials) {
+        const { username, password, rememberMe } = JSON.parse(savedCredentials);
+        document.getElementById('username').value = username || '';
+        document.getElementById('password').value = password || '';
+        document.getElementById('rememberMe').checked = rememberMe;
+    }
+});
+
+function togglePassword() {
+    const passwordInput = document.getElementById('password');
+    const toggleIcon = document.getElementById('togglePassword');
+    
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        toggleIcon.classList.remove('mdi-eye-off');
+        toggleIcon.classList.add('mdi-eye');
+    } else {
+        passwordInput.type = 'password';
+        toggleIcon.classList.remove('mdi-eye');
+        toggleIcon.classList.add('mdi-eye-off');
+    }
+}
+
+// Cập nhật phần xử lý form submit
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+    const rememberMe = document.getElementById('rememberMe').checked;
+
+    try {
+        const response = await fetch('/dang-nhap', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ username, password }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            if (rememberMe) {
+                localStorage.setItem('savedCredentials', JSON.stringify({
+                    username,
+                    password,
+                    rememberMe
+                }));
+            } else {
+                localStorage.removeItem('savedCredentials');
+            }
+
+            showAlert('Đăng nhập thành công', 'success');
+            setTimeout(() => {
+                window.location.href = data.redirectUrl;
+            }, 1000);
+        } else {
+            if (data.message.includes('bị khóa')) {
+                // Hiển thị modal tài khoản bị khóa
+                const modal = document.getElementById('lockedAccountModal');
+                modal.style.display = 'block';
+                modal.classList.add('show');
+                document.body.classList.add('modal-open');
+                
+                // Thêm backdrop
+                const backdrop = document.createElement('div');
+                backdrop.className = 'modal-backdrop fade show';
+                document.body.appendChild(backdrop);
+            } else {
+                showAlert(data.message);
+            }
+        }
+    } catch (error) {
+        showAlert('Đã có lỗi xảy ra');
+    }
+});
+
+// Thêm hàm đóng modal
+function closeLockedAccountModal() {
+    const modal = document.getElementById('lockedAccountModal');
+    modal.style.display = 'none';
+    modal.classList.remove('show');
+    document.body.classList.remove('modal-open');
+    
+    // Xóa backdrop
+    const backdrop = document.querySelector('.modal-backdrop');
+    if (backdrop) {
+        backdrop.remove();
+    }
+}
+
+// Thêm event listeners khi trang load
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = document.getElementById('lockedAccountModal');
+    
+    // Xử lý nút đóng
+    const closeButtons = modal.querySelectorAll('[data-dismiss="modal"]');
+    closeButtons.forEach(button => {
+        button.onclick = closeLockedAccountModal;
+    });
+    
+    // Xử lý click outside modal
+    modal.addEventListener('click', function(event) {
+        if (event.target.closest('.modal-content')) {
+            return;
+        }
+        closeLockedAccountModal();
+    });
+});
+</script>

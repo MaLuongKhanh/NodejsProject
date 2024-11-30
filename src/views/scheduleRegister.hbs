@@ -1,0 +1,392 @@
+<div class="container-scroller">
+    <style>
+        .form-inline .form-group {
+            margin-right: 30px;
+        }
+
+        .form-inline button {
+            margin-right: 20px;
+            margin-top: 10px;
+        }
+
+        .registered-users {
+            font-size: 13px;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0;
+            position: relative;
+            padding-right: 20px;
+        }
+
+        .cancel-btn {
+            padding: 2px 6px;
+            line-height: 1;
+        }
+
+        .count-info {
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .table td {
+            vertical-align: middle;
+            min-width: 150px;
+        }
+        .btn-outline-info {
+            margin: 1rem;
+        }
+
+        .delete-icon {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: #dc3545;
+            padding: 0;
+        }
+
+        .user-item:hover .delete-icon {
+            display: inline-block;
+        }
+
+        /* Style cho table container */
+        .table-responsive {
+            width: 100%;
+            border: 1px solid #2c2e33;
+        }
+
+        /* Style cho table */
+        .table {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+
+        /* Style cho thead */
+        .table thead {
+            background: #191c24;
+        }
+
+        /* Column widths */
+        .table th:nth-child(1) { width: 25%; }  /* Ca trực */
+        .table th:nth-child(2) { width: 25%; }  /* Thứ 2 */
+        .table th:nth-child(3) { width: 25%; }  /* Thứ 4 */
+        .table th:nth-child(4) { width: 25%; }  /* Thứ 6 */
+
+        /* Style cho các cell trong table */
+        .table td {
+            text-align: center;
+            padding: 12px;
+            vertical-align: middle;
+            min-width: 150px;
+        }
+
+        /* Style cho registered users */
+        .registered-users {
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .user-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 4px 0;
+            padding-right: 20px;
+        }
+
+        /* Responsive styles */
+        @media screen and (max-width: 992px) {
+            /* Form đăng ký */
+            .form-inline {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-inline .form-group {
+                margin: 10px 0;
+                width: 100%;
+            }
+
+            .form-inline button {
+                width: 100%;
+                margin: 10px 0;
+            }
+
+            /* Table styles */
+            .table thead {
+                display: none;
+            }
+
+            .table tbody tr {
+                display: flex;
+                flex-direction: column;
+                border-bottom: 3px solid #2c2e33;
+                margin-bottom: 1rem;
+                padding: 1rem;
+            }
+
+            .table td {
+                display: block;
+                text-align: right;
+                padding: 0.5rem 0;
+                border: none;
+            }
+
+            .table td:before {
+                content: attr(data-label);
+                float: left;
+                font-weight: bold;
+                text-transform: uppercase;
+            }
+
+            /* User list styles */
+            .user-item {
+                justify-content: flex-end;
+            }
+
+            .count-info {
+                text-align: right;
+            }
+
+            .delete-icon {
+                position: static;
+                margin-left: 10px;
+            }
+        }
+
+        /* Style cho các row có background xen kẽ */
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+    </style>
+    <div class="content-wrapper">
+        <div class="row">
+            <div class="col-md-12 grid-margin stretch-card">
+                <div class="card">
+                    <div class="card-body">
+                        <h3 class="card-title" style="text-align: center;">Lịch trực của bạn</h3>
+                        <br>
+                        <div class="schedule-form">
+                            <form class="form-inline justify-content-center" method="POST">
+                                <!-- Ngày trực -->
+                                <div class="form-group">
+                                    <label for="ngayTruc">Ngày trực: </label>
+                                    <select id="ngayTruc" class="form-control ml-2">
+                                        <option value="thứ2">Thứ 2</option>
+                                        <option value="thứ4">Thứ 4</option>
+                                        <option value="thứ6">Thứ 6</option>
+                                    </select>
+                                </div>
+
+                                <!-- Ca trực -->
+                                <div class="form-group">
+                                    <label for="caTruc">Ca trực: </label>
+                                    <select id="caTruc" class="form-control ml-2">
+                                        <option value="ca1">7:30am - 9:30am</option>
+                                        <option value="ca2">9:30am - 11:30am</option>
+                                        <option value="ca3">13:30pm - 15:30pm</option>
+                                        <option value="ca4">15:30pm - 17:00pm</option>
+                                    </select>
+                                </div>
+
+                                <!-- Button Đăng ký -->
+                                <button type="button" onclick="registerShift()" class="btn btn-outline-success btn-fw ml-2">Đăng ký</button>
+                                <!-- Button Làm mới -->
+                            </form>
+                        </div>
+                        <br>
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead>
+                                <tr class="bg-light-gray">
+                                    <th class="text-uppercase">Ca trực
+                                    </th>
+                                    <th class="text-uppercase">Thứ 2</th>
+                                    <th class="text-uppercase">Thứ 4</th>
+                                    <th class="text-uppercase">Thứ 6</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const currentUser ={{{json currentUser}}};
+    const SHIFT_MAP = {
+        'ca1': { catruc: 1, time: '7:30am - 9:30am' },
+        'ca2': { catruc: 2, time: '9:30am - 11:30am' },
+        'ca3': { catruc: 3, time: '13:30pm - 15:30pm' },
+        'ca4': { catruc: 4, time: '15:30pm - 17:00pm' }
+    };
+
+    const DAY_MAP = {
+        'thứ2': 2,
+        'thứ4': 4,
+        'thứ6': 6
+    };
+
+
+    function getShiftTime(catruc) {
+        const shift = Object.values(SHIFT_MAP).find(s => s.catruc === catruc);
+        return shift ? shift.time : '';
+    }
+
+    async function loadSchedule() {
+        try {
+            const response = await fetchWithAuth('/dang-ky-ca-truc/schedule');
+            if (response.success) {
+                updateScheduleTable(response.data);
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải lịch trực', error);
+        }
+    }
+
+    function updateScheduleTable(scheduleData) {
+        const tbody = document.querySelector('tbody');
+        tbody.innerHTML = '';
+
+        Object.values(SHIFT_MAP).forEach(shift => {
+            const tr = document.createElement('tr');
+
+            // Cột giờ trực
+            const tdTime = document.createElement('td');
+            tdTime.setAttribute('data-label', 'Ca trực');
+            tdTime.className = 'align-middle';
+            tdTime.textContent = shift.time;
+            tr.appendChild(tdTime);
+
+            // Các cột thứ 2,4,6
+            Object.values(DAY_MAP).forEach((day, index) => {
+                const td = document.createElement('td');
+                const dayLabel = ['Thứ 2', 'Thứ 4', 'Thứ 6'][index];
+                td.setAttribute('data-label', dayLabel);
+                
+                const users = scheduleData[shift.catruc][day] || [];
+
+                if (users.length > 0) {
+                    const userList = document.createElement('div');
+                    userList.className = 'registered-users';
+                    
+                    // Hiển thị số lượng đăng ký
+                    const countDiv = document.createElement('div');
+                    countDiv.className = 'count-info text-secondary mt-2';
+                    countDiv.textContent = `${users.length}/6 đã đăng ký`;
+                    td.appendChild(countDiv);
+
+                    users.forEach(user => {
+                        const userDiv = document.createElement('div');
+                        userDiv.className = 'user-item';
+                        userDiv.setAttribute('data-id', user.schedule_id);
+                        userDiv.innerHTML = `
+                            <span>${user.hoten} (${user.mssv})</span>
+                            ${user.mssv === currentUser.mssv || currentUser.role === 'admin' ?
+                                `<button class="delete-icon" onclick="cancelShift(${day}, ${shift.catruc})">
+                                    <i class="mdi mdi-close"></i>
+                                </button>` : ''
+                            }
+                        `;
+                        userList.appendChild(userDiv);
+                    });
+
+                    td.appendChild(userList);
+                }
+
+                tr.appendChild(td);
+            });
+
+            tbody.appendChild(tr);
+        });
+    }
+
+    async function cancelShift(ngaytrongtuan, catruc) {
+        try {
+            const response = await fetchWithAuth(
+                    `/dang-ky-ca-truc/cancel/${ngaytrongtuan}/${catruc}`,
+                    { method: 'DELETE' }
+            );
+
+            if (response.success) {
+                showAlert('Hủy ca trực thành công', 'success');
+                loadSchedule();
+            } else {
+                showAlert(response.message);
+            }
+        } catch (error) {
+            showAlert('Lỗi khi hủy ca trực');
+        }
+    }
+
+    async function registerShift() {
+        const ngayTruc = document.getElementById('ngayTruc').value;
+        const caTruc = document.getElementById('caTruc').value;
+
+        try {
+            const response = await fetchWithAuth('/dang-ky-ca-truc/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    ngaytrongtuan: DAY_MAP[ngayTruc],
+                    catruc: SHIFT_MAP[caTruc].catruc
+                })
+            });
+
+            if (response.success) {
+                showAlert('Đăng ký ca trực thành công', 'success');
+                loadSchedule();
+            } else {
+                showAlert(response.message);
+            }
+        } catch (error) {
+            showAlert('Lỗi khi đăng ký ca trực');
+        }
+    }
+
+
+    document.addEventListener('DOMContentLoaded', loadSchedule);
+</script>

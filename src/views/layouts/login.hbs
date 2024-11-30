@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>IT-Center</title>
+    <!-- plugins:css -->
+    <link rel="stylesheet" href="/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="/vendors/css/vendor.bundle.base.css">
+    <!-- endinject -->
+    <!-- Plugin css for this page -->
+    <!-- End plugin css for this page -->
+    <!-- inject:css -->
+    <!-- endinject -->
+    <!-- Layout styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- End layout styles -->
+    <link rel="shortcut icon" href="/images/ITCenterLogoMini.png" />
+  </head>
+  <body>
+    {{> alert}}
+      <div class="container-scroller">
+          <div class="container-fluid page-body-wrapper full-page-wrapper">
+              <div class="row w-100 m-0">
+                  <div class="content-wrapper full-page-wrapper d-flex align-items-center auth login-bg">
+                      {{{body}}}
+                  </div>
+                  <!-- content-wrapper ends -->
+              </div>
+              <!-- row ends -->
+          </div>
+          <!-- page-body-wrapper ends -->
+      </div>
+      <!-- container-scroller -->
+      <!-- plugins:js -->
+      <script src="/vendors/js/vendor.bundle.base.js"></script>
+      <!-- endinject -->
+      <!-- Plugin js for this page -->
+      <!-- End plugin js for this page -->
+      <!-- inject:js -->
+      <script src="/js/off-canvas.js"></script>
+      <script src="/js/hoverable-collapse.js"></script>
+      <script src="/js/misc.js"></script>
+      <script src="/js/settings.js"></script>
+      <script src="/js/todolist.js"></script>
+      <script>
+        const fetchWithAuth = async (url, options = {}) => {
+            try {
+                
+                options.credentials = 'include';
+                let response = await fetch(url, options);
+                
+                let data;
+                try {
+                    data = await response.json();
+                    if (data.message) {
+                        if (data.success === true) {
+                            showAlert(data.message, 'success');
+                        } else {
+                            showAlert(data.message, 'error');
+                        }
+                    }
+                } catch (e) {
+                    throw new Error('Invalid JSON response');
+                }
+                
+                if (!data?.success || response.status === 401) {
+                    const refreshResponse = await fetch('/auth/refresh-token', {
+                        method: 'POST',
+                        credentials: 'include'
+                    });
+                    
+                    const refreshData = await refreshResponse.json();
+                    
+                    if (!refreshData.success) {
+                        window.location.href = '/dang-nhap';
+                        return null;
+                    }
+                    
+                    response = await fetch(url, options);
+                    data = await response.json();
+                }
+                
+                return data;
+            } catch (error) {
+                console.error('API call failed:', error);
+                throw error;
+            }
+        };
+        const showAlert = (message, type = 'error') => {
+            const alert = document.getElementById(type === 'error' ? 'errorAlert' : 'successAlert');
+            alert.textContent = message;
+            alert.style.display = 'block';
+            
+            setTimeout(() => {
+                alert.style.display = 'none';
+            }, 3000);
+        };
+      </script>
+      <!-- endinject -->
+  </body>
+</html>

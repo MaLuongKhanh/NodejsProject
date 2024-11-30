@@ -1,0 +1,265 @@
+<style>
+    .form-control:disabled,
+    .form-control[readonly] {
+        background-color: #2c2e33 !important;
+        opacity: 1;
+    }
+
+    .user-avatar {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        overflow: hidden;
+        margin: 0 auto;
+        position: relative;
+    }
+
+    .user-avatar img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .user-profile {
+        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+    }
+
+</style>
+<div class="container-scroller">
+    <div class="content-wrapper">
+        <div class="row gutters">
+            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="row gutters">
+                            <div class="account-settings" style="margin: 0 auto">
+                                <div class="user-profile">
+                                    <div class="user-avatar">
+                                        <img src="/uploads/avatars/default-avatar.jpg"
+                                             alt="Default Avatar">
+                                    </div>
+                                    <h6>Cập nhật ảnh đại diện</h6>
+                                    <input type="file" id="fileUpload" class="form-control" style="display: none;"
+                                           onchange="previewImage(event)">
+                                    <button class="btn btn-info" id="uploadBtn">Chọn ảnh</button>
+                                </div>
+                                <!-- <div class="about">
+                                <h5 class="mb-2 text-primary">About</h5>
+                                <p>I'm Yuki. Full Stack Designer I enjoy creating user-centric, delightful and human experiences.
+                                </p>
+                              </div> -->
+                            </div>
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-3 text-primary">Thông tin cá nhân</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="fullName">Họ và tên</label>
+                                    <input type="text" class="form-control" id="fullName" placeholder="Nhập họ và tên">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="eMail">Ngày sinh</label>
+                                    <input type="date" class="form-control" id="birthday" placeholder="dd/mm/yy"
+                                           style="color: #596280">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="userID">MSSV</label>
+                                    <input type="text" class="form-control" id="userID" readonly>
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="role">Vị trí</label>
+                                    <input type="text" class="form-control" id="role" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <h6 class="mb-3 text-primary">Thông tin liên hệ</h6>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="facebook">Facebook</label>
+                                    <input type="text" class="form-control" id="facebook" placeholder="URL">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="abc@gmail">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="github">Github</label>
+                                    <input type="text" class="form-control" id="github" placeholder="URL">
+                                </div>
+                            </div>
+                            <div class="col-xl-6 col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="ơhonenumber">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="phonenumber" placeholder="+84">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row gutters">
+                            <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="text-right">
+                                    <button type="button" id="submit" name="submit" class="btn btn-primary">Cập
+                                        nhật</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var createButton = document.getElementById('createButton');
+    if (createButton) { // Kiểm tra nếu phần tử tồn tại
+        createButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định
+            window.location.href = "../../trang-chu#scrollToForm";
+        });
+    }
+
+    document.getElementById('uploadBtn').addEventListener('click', function() {
+        document.getElementById('fileUpload').click();
+    });
+
+    // Load user profile data when page loads
+    document.addEventListener('DOMContentLoaded', async function() {
+        try {
+            const response = await fetchWithAuth('/quan-li-trang-ca-nhan/data');
+            if (response.success) {
+                const profile = response.data;
+                // Fill user information
+                document.getElementById('fullName').value = profile.hoten || '';
+                document.getElementById('userID').value = profile.mssv || '';
+                document.getElementById('email').value = profile.email || '';
+                document.getElementById('birthday').value = profile.ngaysinh ? new Date(profile.ngaysinh).toISOString().split('T')[0] : '';
+                document.getElementById('facebook').value = profile.url?.facebookURL || '';
+                document.getElementById('github').value = profile.url?.githubURL || '';
+                document.getElementById('phonenumber').value = profile.phonenumber || '';
+
+                // Xử lý role
+                const roleTranslations = {
+                    'admin': 'Quản trị viên',
+                    'lead': 'Trưởng nhóm',
+                    'member': 'Thành viên',
+                    'customer': 'Khách hàng'
+                };
+                
+                const roleElement = document.getElementById('role');
+                if (profile.role && roleTranslations[profile.role]) {
+                    roleElement.value = roleTranslations[profile.role];
+                } else {
+                    roleElement.value = 'Không xác định';
+                }
+
+                // Set avatar if exists
+                if (profile.avatar) {
+                    document.querySelector('.user-avatar img').src = profile.avatar;
+                }
+            }
+        } catch (error) {
+            showAlert(response.message);
+        }
+    });
+
+    // Handle avatar upload
+    async function uploadAvatar(file) {
+        try {
+            const formData = new FormData();
+            formData.append('avatar', file);
+
+            const response = await fetchWithAuth('/quan-li-trang-ca-nhan/avatar', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.success) {
+                showAlert('Cập nhật ảnh đại diện thành công', 'success');
+            } else {
+                showAlert(response.message);
+            }
+        } catch (error) {
+            showAlert('Lỗi khi tải ảnh lên');
+        }
+    }
+
+    // Preview and upload avatar
+    function previewImage(event) {
+        const file = event.target.files[0];
+        if (file) {
+            // Preview
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.querySelector('.user-avatar img').src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+
+            // Upload
+            uploadAvatar(file);
+        }
+    }
+
+    // Handle profile update
+    document.querySelector('.btn-primary').addEventListener('click', async () => {
+        const updateBtn = document.querySelector('.btn-primary');
+        try {
+            // Disable button and show loading state
+            updateBtn.disabled = true;
+            updateBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang cập nhật...';
+
+            const formData = {
+                hoten: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                ngaysinh: document.getElementById('birthday').value,
+                url: {
+                    facebookURL: document.getElementById('facebook').value,
+                    githubURL: document.getElementById('github').value
+                },
+                phonenumber: document.getElementById('phonenumber').value
+            };
+
+            const response = await fetchWithAuth('/quan-li-trang-ca-nhan/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+
+            if (response.success) {
+                showAlert('Cập nhật thông tin thành công', 'success');
+            } else {
+                showAlert(response.message);
+            }
+        } catch (error) {
+            showAlert('Lỗi khi cập nhật thông tin: ' + error.message);
+        } finally {
+            // Reset button state
+            updateBtn.disabled = false;
+            updateBtn.innerHTML = 'Cập nhật';
+        }
+    });
+
+    // Handle reset button
+    document.querySelector('.btn-secondary').addEventListener('click', () => {
+        window.location.reload();
+    });
+</script>

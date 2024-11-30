@@ -1,0 +1,65 @@
+<nav class="navbar p-0 fixed-top d-flex flex-row">
+    <div class="navbar-brand-wrapper d-flex d-lg-none align-items-center justify-content-center">
+        {{#if (isRole user.role 'admin')}}
+            <a class="navbar-brand brand-logo-mini" href="/admin">
+        {{else}}
+            <a class="navbar-brand brand-logo-mini" href="/trang-chu">
+        {{/if}}
+        <img src="/images/logo-mini.svg"
+                    alt="logo" />
+        </a>
+    </div>
+    <div class="navbar-menu-wrapper flex-grow d-flex align-items-stretch">
+        <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-toggle="minimize">
+            <span class="mdi mdi-menu"></span>
+        </button>
+        <ul class="navbar-nav navbar-nav-right">
+            <li class="nav-item d-none d-lg-block">
+                <a class="nav-link btn btn-success create-new-button" id="createButton" href="#" data-toggle="modal"
+                    data-target="#requestModal">+ Tạo mới yêu cầu</a>
+            </li>
+        </ul>
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
+                data-toggle="offcanvas">
+            <span class="mdi mdi-format-line-spacing"></span>
+        </button>
+    </div>
+</nav>
+
+<script>
+    var createButton = document.getElementById('createButton');
+    if (createButton) {
+        createButton.addEventListener('click', function (event) {
+            event.preventDefault(); // Ngăn chặn hành động mặc định
+            const targetElement = document.getElementById('requestForm'); // Tham chiếu đến form
+            targetElement.scrollIntoView({ behavior: 'smooth' }); // Cuộn xuống vị trí của form
+        });
+    }
+
+    window.onload = function () {
+        // Kiểm tra nếu URL có chứa anchor #scrollToForm
+        if (window.location.hash === '#scrollToForm') {
+            const targetElement = document.getElementById('requestForm'); // Tham chiếu đến form
+            if (targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' }); // Cuộn xuống vị trí của form
+            }
+        }
+    };
+    document.getElementById('createButton').addEventListener('click', async function (event) {
+        event.preventDefault();
+        try {
+            const response = await fetchWithAuth('/auth/check');
+            if (response.success) {
+                if (response.user.role === 'admin') {
+                    window.location.href = "../../admin#scrollToForm";
+                } else {
+                    window.location.href = "../../trang-chu#scrollToForm";
+                }
+            }
+        } catch (error) {
+            console.error('Error checking auth:', error);
+            // Mặc định chuyển về trang-chu nếu có lỗi
+            window.location.href = "../../trang-chu#scrollToForm";
+        }
+    });
+</script>
