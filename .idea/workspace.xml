@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="9af38dff-ff9c-4cd2-b175-e18a81e85835" name="Changes" comment="edit in package.json" />
+    <list default="true" id="9af38dff-ff9c-4cd2-b175-e18a81e85835" name="Changes" comment="fix error name in route path" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +121,7 @@
       <workItem from="1728134285681" duration="618000" />
       <workItem from="1728134926038" duration="4529000" />
       <workItem from="1728181279560" duration="10037000" />
-      <workItem from="1732975438796" duration="1992000" />
+      <workItem from="1732975438796" duration="2289000" />
     </task>
     <task id="LOCAL-00001" summary="test commit">
       <option name="closed" value="true" />
@@ -195,7 +195,15 @@
       <option name="project" value="LOCAL" />
       <updated>1732976950303</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="fix error name in route path">
+      <option name="closed" value="true" />
+      <created>1732977757952</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1732977757952</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -219,6 +227,7 @@
     <MESSAGE value="add MVC layout" />
     <MESSAGE value="add Nodejs project final version" />
     <MESSAGE value="edit in package.json" />
-    <option name="LAST_COMMIT_MESSAGE" value="edit in package.json" />
+    <MESSAGE value="fix error name in route path" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix error name in route path" />
   </component>
 </project>
